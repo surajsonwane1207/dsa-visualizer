@@ -142,8 +142,8 @@ pre {
 .grid-node {
   width: 30px;
   height: 30px;
-  border: 1px solid rgba(139, 92, 246, 0.22);
-  background-color: var(--bg-card);
+  border: 1px solid #282c3f;
+  background-color: #141622;
   transition: background-color 0.2s ease, transform 0.1s ease;
   display: inline-block;
   user-select: none;
@@ -162,8 +162,8 @@ pre {
 }
 
 .grid-node-wall {
-  background-color: #3b4252 !important;
-  border-color: #4c566a;
+  background-color: #475569 !important;
+  border-color: #64748b !important;
 }
 
 .grid-node-visited {
@@ -177,16 +177,16 @@ pre {
 @keyframes nodeVisited {
   0% {
     transform: scale(0.3);
-    background-color: rgba(30, 27, 75, 0.7);
+    background-color: rgba(124, 58, 237, 0.4);
     border-radius: 50%;
   }
   50% {
-    background-color: rgba(124, 58, 237, 0.55);
+    background-color: rgba(139, 92, 246, 0.6);
   }
   100% {
     transform: scale(1.0);
-    background-color: rgba(139, 92, 246, 0.3);
-    border: 1px solid rgba(139, 92, 246, 0.4);
+    background-color: #271a4c;
+    border: 1px solid #8b5cf6;
   }
 }
 
