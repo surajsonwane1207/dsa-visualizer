@@ -563,7 +563,7 @@ export default function PathfindingVisualizer() {
           <div
             style={{
               display: 'grid',
-              gridTemplateColumns: `repeat(${COLS}, 25px)`,
+              gridTemplateColumns: `repeat(${COLS}, 30px)`,
               gap: '1px',
               backgroundColor: 'var(--border-color)',
               border: '2px solid var(--border-color)',
