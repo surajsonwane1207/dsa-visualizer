@@ -205,34 +205,26 @@ export default function PathfindingVisualizer() {
     if (isRunning || !mouseIsPressed) return;
 
     if (draggingNode === 'start') {
-      // Don't overlap with target
       if (row === targetNode.row && col === targetNode.col) return;
-      
-      const prevStart = startNode;
-      const elPrev = document.getElementById(`node-${prevStart.row}-${prevStart.col}`);
-      if (elPrev) elPrev.classList.remove('grid-node-start');
-      
-      const elNew = document.getElementById(`node-${row}-${col}`);
-      if (elNew) {
-        elNew.classList.remove('grid-node-wall');
-        elNew.classList.add('grid-node-start');
-      }
-
+      setGrid((prevGrid) => {
+        const newGrid = [...prevGrid];
+        if (newGrid[row][col].isWall) {
+          newGrid[row] = [...newGrid[row]];
+          newGrid[row][col] = { ...newGrid[row][col], isWall: false };
+        }
+        return newGrid;
+      });
       setStartNode({ row, col });
     } else if (draggingNode === 'target') {
-      // Don't overlap with start
       if (row === startNode.row && col === startNode.col) return;
-      
-      const prevTarget = targetNode;
-      const elPrev = document.getElementById(`node-${prevTarget.row}-${prevTarget.col}`);
-      if (elPrev) elPrev.classList.remove('grid-node-target');
-      
-      const elNew = document.getElementById(`node-${row}-${col}`);
-      if (elNew) {
-        elNew.classList.remove('grid-node-wall');
-        elNew.classList.add('grid-node-target');
-      }
-
+      setGrid((prevGrid) => {
+        const newGrid = [...prevGrid];
+        if (newGrid[row][col].isWall) {
+          newGrid[row] = [...newGrid[row]];
+          newGrid[row][col] = { ...newGrid[row][col], isWall: false };
+        }
+        return newGrid;
+      });
       setTargetNode({ row, col });
     } else {
       toggleWall(row, col);
@@ -245,19 +237,17 @@ export default function PathfindingVisualizer() {
   };
 
   const toggleWall = (row, col) => {
-    const node = grid[row][col];
-    if (node.isStart || node.isTarget) return;
-
-    const el = document.getElementById(`node-${row}-${col}`);
-    if (el) {
-      if (el.classList.contains('grid-node-wall')) {
-        el.classList.remove('grid-node-wall');
-        node.isWall = false;
-      } else {
-        el.classList.add('grid-node-wall');
-        node.isWall = true;
-      }
-    }
+    if ((row === startNode.row && col === startNode.col) || (row === targetNode.row && col === targetNode.col)) return;
+    setGrid((prevGrid) => {
+      const newGrid = [...prevGrid];
+      const node = newGrid[row][col];
+      newGrid[row] = [...newGrid[row]];
+      newGrid[row][col] = {
+        ...node,
+        isWall: !node.isWall,
+      };
+      return newGrid;
+    });
   };
 
   // Algorithms Implementation
@@ -581,16 +571,21 @@ export default function PathfindingVisualizer() {
           onMouseLeave={handleMouseUp}
         >
           {grid.map((row, rIdx) =>
-            row.map((node, cIdx) => (
-              <div
-                key={`${rIdx}-${cIdx}`}
-                id={`node-${rIdx}-${cIdx}`}
-                className={`grid-node ${node.isStart ? 'grid-node-start' : node.isTarget ? 'grid-node-target' : ''}`}
-                onMouseDown={() => handleMouseDown(rIdx, cIdx)}
-                onMouseEnter={() => handleMouseEnter(rIdx, cIdx)}
-                onMouseUp={handleMouseUp}
-              />
-            ))
+            row.map((node, cIdx) => {
+              const isStart = rIdx === startNode.row && cIdx === startNode.col;
+              const isTarget = rIdx === targetNode.row && cIdx === targetNode.col;
+              const isWall = node.isWall;
+              return (
+                <div
+                  key={`${rIdx}-${cIdx}`}
+                  id={`node-${rIdx}-${cIdx}`}
+                  className={`grid-node ${isStart ? 'grid-node-start' : isTarget ? 'grid-node-target' : isWall ? 'grid-node-wall' : ''}`}
+                  onMouseDown={() => handleMouseDown(rIdx, cIdx)}
+                  onMouseEnter={() => handleMouseEnter(rIdx, cIdx)}
+                  onMouseUp={handleMouseUp}
+                />
+              );
+            })
           )}
         </div>
       </div>
