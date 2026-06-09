@@ -557,36 +557,39 @@ export default function PathfindingVisualizer() {
           </div>
         </div>
 
-        {/* The Grid */}
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: `repeat(${COLS}, 25px)`,
-            gap: '1px',
-            backgroundColor: 'var(--border-color)',
-            border: '2px solid var(--border-color)',
-            borderRadius: '8px',
-            overflow: 'hidden'
-          }}
-          onMouseLeave={handleMouseUp}
-        >
-          {grid.map((row, rIdx) =>
-            row.map((node, cIdx) => {
-              const isStart = rIdx === startNode.row && cIdx === startNode.col;
-              const isTarget = rIdx === targetNode.row && cIdx === targetNode.col;
-              const isWall = node.isWall;
-              return (
-                <div
-                  key={`${rIdx}-${cIdx}`}
-                  id={`node-${rIdx}-${cIdx}`}
-                  className={`grid-node ${isStart ? 'grid-node-start' : isTarget ? 'grid-node-target' : isWall ? 'grid-node-wall' : ''}`}
-                  onMouseDown={() => handleMouseDown(rIdx, cIdx)}
-                  onMouseEnter={() => handleMouseEnter(rIdx, cIdx)}
-                  onMouseUp={handleMouseUp}
-                />
-              );
-            })
-          )}
+        {/* The Grid Wrapper for safe scrolling */}
+        <div style={{ minWidth: 'max-content', display: 'flex', justifyContent: 'center', width: '100%' }}>
+          {/* The Grid */}
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: `repeat(${COLS}, 25px)`,
+              gap: '1px',
+              backgroundColor: 'var(--border-color)',
+              border: '2px solid var(--border-color)',
+              borderRadius: '8px',
+              overflow: 'hidden'
+            }}
+            onMouseLeave={handleMouseUp}
+          >
+            {grid.map((row, rIdx) =>
+              row.map((node, cIdx) => {
+                const isStart = rIdx === startNode.row && cIdx === startNode.col;
+                const isTarget = rIdx === targetNode.row && cIdx === targetNode.col;
+                const isWall = node.isWall;
+                return (
+                  <div
+                    key={`${rIdx}-${cIdx}`}
+                    id={`node-${rIdx}-${cIdx}`}
+                    className={`grid-node ${isStart ? 'grid-node-start' : isTarget ? 'grid-node-target' : isWall ? 'grid-node-wall' : ''}`}
+                    onMouseDown={() => handleMouseDown(rIdx, cIdx)}
+                    onMouseEnter={() => handleMouseEnter(rIdx, cIdx)}
+                    onMouseUp={handleMouseUp}
+                  />
+                );
+              })
+            )}
+          </div>
         </div>
       </div>
 
