@@ -85,12 +85,36 @@ const ALGO_DETAILS = {
   }
 };
 
+// Initialize grid
+const getInitialGrid = (startRow = 8, startCol = 6, targetRow = 8, targetCol = 29) => {
+  const initialGrid = [];
+  for (let r = 0; r < ROWS; r++) {
+    const currentRow = [];
+    for (let c = 0; c < COLS; c++) {
+      currentRow.push({
+        row: r,
+        col: c,
+        isStart: r === startRow && c === startCol,
+        isTarget: r === targetRow && c === targetCol,
+        isWall: false,
+        distance: Infinity,
+        gScore: Infinity,
+        fScore: Infinity,
+        isVisited: false,
+        previousNode: null,
+      });
+    }
+    initialGrid.push(currentRow);
+  }
+  return initialGrid;
+};
+
 export default function PathfindingVisualizer() {
-  const [grid, setGrid] = useState([]);
-  const [mouseIsPressed, setMouseIsPressed] = useState(false);
-  const [draggingNode, setDraggingNode] = useState(null); // 'start' or 'target'
   const [startNode, setStartNode] = useState({ row: 8, col: 6 });
   const [targetNode, setTargetNode] = useState({ row: 8, col: 29 });
+  const [grid, setGrid] = useState(() => getInitialGrid(8, 6, 8, 29));
+  const [mouseIsPressed, setMouseIsPressed] = useState(false);
+  const [draggingNode, setDraggingNode] = useState(null); // 'start' or 'target'
   const [selectedAlgo, setSelectedAlgo] = useState('dijkstra');
   const [speed, setSpeed] = useState(20); // ms delay per node
   const [isRunning, setIsRunning] = useState(false);
@@ -103,37 +127,13 @@ export default function PathfindingVisualizer() {
   const isRunningRef = useRef(isRunning);
   isRunningRef.current = isRunning;
 
-  // Initialize grid
-  const getInitialGrid = (startLoc = startNode, targetLoc = targetNode) => {
-    const initialGrid = [];
-    for (let r = 0; r < ROWS; r++) {
-      const currentRow = [];
-      for (let c = 0; c < COLS; c++) {
-        currentRow.push({
-          row: r,
-          col: c,
-          isStart: r === startLoc.row && c === startLoc.col,
-          isTarget: r === targetLoc.row && c === targetLoc.col,
-          isWall: false,
-          distance: Infinity,
-          gScore: Infinity,
-          fScore: Infinity,
-          isVisited: false,
-          previousNode: null,
-        });
-      }
-      initialGrid.push(currentRow);
-    }
-    return initialGrid;
-  };
-
   useEffect(() => {
     resetGrid();
   }, []);
 
   const resetGrid = () => {
     if (isRunning) return;
-    const initialGrid = getInitialGrid();
+    const initialGrid = getInitialGrid(startNodeRef.current.row, startNodeRef.current.col, targetNodeRef.current.row, targetNodeRef.current.col);
     setGrid(initialGrid);
 
     // Reset visual classes

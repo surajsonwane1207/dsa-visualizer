@@ -142,7 +142,7 @@ pre {
 .grid-node {
   width: 25px;
   height: 25px;
-  border: 1px solid rgba(33, 36, 55, 0.4);
+  border: 1px solid rgba(139, 92, 246, 0.22);
   background-color: var(--bg-card);
   transition: background-color 0.2s ease, transform 0.1s ease;
   display: inline-block;
