@@ -141,12 +141,8 @@ export default function PathfindingVisualizer() {
       for (let c = 0; c < COLS; c++) {
         const el = document.getElementById(`node-${r}-${c}`);
         if (el) {
-          el.className = 'grid-node';
-          if (r === startNode.row && c === startNode.col) {
-            el.classList.add('grid-node-start');
-          } else if (r === targetNode.row && c === targetNode.col) {
-            el.classList.add('grid-node-target');
-          }
+          el.classList.remove('grid-node-visited');
+          el.classList.remove('grid-node-shortest-path');
         }
       }
     }
